@@ -25,6 +25,8 @@ namespace Calculator
             inp.AppendText("!");
         }
 
+      
+
         private void button4_Click(object sender, EventArgs e)
         {
             inp.AppendText("+");
@@ -60,6 +62,7 @@ namespace Calculator
         {
             inp.AppendText("3");
         }
+
 
         private void four_Click(object sender, EventArgs e)
         {
@@ -137,6 +140,9 @@ namespace Calculator
         private void button3_Click(object sender, EventArgs e)
         {
             inp.Text = "";
+            history.Text = "";
+            label1.Text = "";
+
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -246,6 +252,7 @@ namespace Calculator
 
                 }
 
+                label1.Text = getNumberName(nums[0]);
 
                 history.Text = inp.Text + "=";
                 inp.Text = nums[0].ToString();
@@ -266,7 +273,7 @@ namespace Calculator
                 if (f[f.Length-1].ToString().Equals("!"))
                 {
                     String t = f.Remove(f.Length - 1);
-                    inp.Text = t;
+                   
                     numbers.Add(getFactorial(float.Parse(t, CultureInfo.InvariantCulture.NumberFormat)));
                    
                 }
@@ -333,7 +340,312 @@ namespace Calculator
 
 
 
+        String getNumberName(float num)
+        {
+            String[] digits = { "", "bir", "iki", "üç", "dörd", "beş", "altı", "yeddi", "səkkiz", "doqquz" };
 
+            String[] decimals = { "", "on", "iyirmi", "otuz", "qırx", "əlli", "altmış", "yetmiş", "səksən", "doxsan" };
+
+            String[] others = { "", "", "", "yüz", "min", "", "", "milyon", ""," "," ", "milyard" };
+
+
+            String number = num.ToString();
+
+            String result = "";
+
+            bool isNegative = false;
+
+            if (number[0].ToString().Equals("-"))
+            {
+                isNegative = true;
+                number=number.Remove(0,1);
+            }
+
+
+                bool isInteger =! number.Contains(".".ToString());
+
+
+            String[] parts = new string[2];
+
+          
+
+            String decString = "";
+
+            if (isInteger) {
+
+
+                parts[0] = number;
+
+            }
+            else
+            { 
+
+                parts = number.Split(".");
+
+               
+            }
+
+           
+
+
+
+
+
+
+
+
+
+            String text = parts[0];
+
+           
+
+            int length = text.Length;
+
+
+            int dig;
+
+ 
+
+            
+            
+            if(length>0)
+            {
+                dig = int.Parse(text[length - 1].ToString());
+             
+                result = result + digits[dig] + " ";
+
+            }
+
+
+            if (length > 1)
+            {
+                dig = int.Parse(text[length - 2].ToString());
+
+                
+                result = decimals[dig] + " "+result + " ";
+
+            }
+
+            if (length > 2)
+            {
+
+               
+               dig = int.Parse(text[length - 3].ToString());
+                if (dig != 0)
+                {
+
+                    result = " " + others[3] + " " + result;
+
+                    if (dig > 1)
+                        result = digits[dig]+" "+ result;
+
+                }
+            }
+
+            if (length > 3)
+            {
+
+
+                dig = int.Parse(text[length - 4].ToString());
+
+                if (dig != 0)
+                {
+
+                    result = " " + others[4] + " " + result;
+
+                    if (dig > 1)
+                        result = digits[dig] + " " + result;
+
+                }
+
+            }
+
+
+            if (length > 4)
+            {
+
+
+                dig = int.Parse(text[length - 5].ToString());
+
+                if (dig != 0)
+                {
+
+                    result = " " + decimals[dig] + " " + result;
+
+                  
+
+                }
+
+            }
+
+            if (length > 5)
+            {
+
+
+                dig = int.Parse(text[length - 6].ToString());
+                if (dig != 0)
+                {
+                    result = " " + others[3] + " " + result;
+
+                    if (dig > 1)
+                    {
+                        result = digits[dig] + result;
+                    }
+                }
+
+            }
+
+            if (length > 6)
+            {
+
+
+                dig = int.Parse(text[length - 7].ToString());
+                
+                
+                    result = digits[dig] + " " + others[7]+" "+ result ;
+                
+
+            }
+
+
+
+            //********************8888888888
+            if (length > 7)
+            {
+
+
+                dig = int.Parse(text[length - 8].ToString());
+                if (dig != 0)
+                {
+                    result = decimals[dig] + " " + result;
+                }
+
+            }
+
+
+
+            //******************99999999999
+
+            if (length > 8)
+            {
+
+
+                dig = int.Parse(text[length - 9].ToString());
+                if (dig != 0)
+                {
+                    result = others[3] + " " + result+" ";
+
+                    if (dig > 1)
+                    {
+                        result = digits[dig] + " " + result;
+                    }
+
+
+                }
+
+            }
+
+            if (length > 9)
+            {
+
+
+                dig = int.Parse(text[length - 7].ToString());
+
+
+                result = digits[dig] + " " + others[11] + " " + result;
+
+
+            }
+
+
+
+
+
+
+
+            if(isInteger)
+            {
+                
+                if (isNegative)
+                {
+                    result = "mənfi " + result;
+                }
+                return result;
+            }
+            else
+            {
+                String dec = getNumberName(float.Parse(parts[1]));
+
+                 result = result + "tam ";
+
+                int len = parts[1].Length;
+
+                 if (len == 1)
+                {
+                    result = result + " onda ";
+                }
+                if (len == 2)
+                {
+                    result = result + " yüzdə ";
+                }
+
+                if (len == 3)
+                {
+                    result = result + " mində ";
+                }
+                if (len == 4)
+                {
+                    result = result + " on  mində ";
+                }
+                if (len == 5)
+                {
+                    result = result + " yüz mində ";
+                }
+
+                if (len == 6)
+                {
+                    result = result + " milyonda ";
+                }
+                if (len == 7)
+                {
+                    result = result + " on milyonda ";
+                }
+                if (len == 8)
+                {
+                    result = result + " yüz milyonda";
+                }
+                if (len == 9)
+                {
+                    result = result + " milyardda";
+                }
+
+                result = result + dec ;
+
+                if(isNegative)
+                {
+                    result = "mənfi " + result;
+                }
+
+                return result;
+
+            }
+
+
+
+
+
+
+
+           
+
+
+
+           
+           
+
+        }
+
+        
     }
 
 

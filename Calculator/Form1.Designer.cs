@@ -51,6 +51,7 @@ namespace Calculator
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.history = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // inp
@@ -276,7 +277,7 @@ namespace Calculator
             this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.button6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button6.ForeColor = System.Drawing.Color.LemonChiffon;
-            this.button6.Location = new System.Drawing.Point(416, 304);
+            this.button6.Location = new System.Drawing.Point(416, 309);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(77, 42);
             this.button6.TabIndex = 21;
@@ -289,7 +290,7 @@ namespace Calculator
             this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button7.ForeColor = System.Drawing.Color.LemonChiffon;
-            this.button7.Location = new System.Drawing.Point(333, 304);
+            this.button7.Location = new System.Drawing.Point(333, 309);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(77, 42);
             this.button7.TabIndex = 20;
@@ -334,12 +335,24 @@ namespace Calculator
             this.history.TabIndex = 24;
             this.history.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.label1.Location = new System.Drawing.Point(115, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(13, 20);
+            this.label1.TabIndex = 25;
+            this.label1.Text = " ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.ClientSize = new System.Drawing.Size(609, 440);
+            this.ClientSize = new System.Drawing.Size(609, 445);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.history);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button4);
@@ -394,6 +407,7 @@ namespace Calculator
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox history;
+        private System.Windows.Forms.Label label1;
     }
 }
 
