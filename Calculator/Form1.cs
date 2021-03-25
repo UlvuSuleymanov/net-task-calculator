@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -135,28 +136,37 @@ namespace Calculator
                 inp.Text = inp.Text.Remove(length - 1);
             }
 
+           
+
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             inp.Text = "";
             history.Text = "";
-            label1.Text = "";
+            label2.Text = "";
+          
+
 
         }
+
+
+        char[] dividers = { 'x', '/', '+', '-' };
+        List<float> nums = new List<float>();
+        List<string> sequence = new List<string>();
 
         private void button6_Click(object sender, EventArgs e)
         {
             String text = inp.Text;
+
             if (text.Length > 1)
             {
 
 
-                char[] dividers = { 'x', '/', '+', '-' };
+               
 
-                List<string> sequence = new List<string>();
                 List<string> numStrings = new List<string>();
-                List<float> nums = new List<float>();
+               
 
                 bool firstNumIsNegative = false;
 
@@ -167,6 +177,7 @@ namespace Calculator
                 }
 
                 numStrings = text.Trim().Split(dividers).ToList<string>();
+
                 nums = stringsToFloats(numStrings);
 
 
@@ -203,7 +214,7 @@ namespace Calculator
                 for (int j = 0; j < dividers.Length; j++)
                 {
                     char c = dividers[j];
-                    for (int i = 0; i < sequence.Count; i++)
+                    for (int i = sequence.Count-1; i >=0  ; i--)
                     {
 
 
@@ -211,35 +222,33 @@ namespace Calculator
                         if (sequence[i].Equals(c.ToString()))
                         {
                             String expression = c.ToString();
-
-
+ 
 
                             switch (expression)
                             {
 
                                 case "x":
 
-                                    nums = product(nums, i);
+                                     product(i);
                                     break;
 
                                 case "/":
-                                    nums = divide(nums, i);
+                                    divide(i);
                                     break;
 
                                 case "+":
-                                    nums = sum(nums, i);
+                                    sum(i);
                                     break;
 
                                 case "-":
-                                    nums = subtract(nums, i);
+                                     subtract(i);
                                     break;
-
 
                             }
 
 
 
-                            sequence.RemoveAt(i);
+                            
 
 
 
@@ -252,11 +261,16 @@ namespace Calculator
 
                 }
 
-                label1.Text = getNumberName(nums[0]);
+                label2.Text = getNumberName(nums[0]);
 
                 history.Text = inp.Text + "=";
                 inp.Text = nums[0].ToString();
 
+            }
+
+            else
+            {
+                label2.Text = getNumberName(float.Parse(inp.Text));
             }
 
 
@@ -270,6 +284,7 @@ namespace Calculator
 
 
             foreach (string f in nums) {
+
                 if (f[f.Length-1].ToString().Equals("!"))
                 {
                     String t = f.Remove(f.Length - 1);
@@ -297,43 +312,44 @@ namespace Calculator
 
             for (int i = 1; i <= a; i++)
             {
-                factroial =factroial* i;
+                factroial = factroial * i;
             }
 
             return factroial;
 
         }
 
-    
-        
 
 
-        List<float> sum(List<float> nums,  int index)
+
+
+        void sum(int index)
         {
             nums[index] = nums[index] + nums[index + 1];
             nums.RemoveAt(index + 1);
-            return nums;
+            sequence.RemoveAt(index);
         }
 
-        List<float> divide(List<float> nums, int index)
+        void  divide(   int index)
         {
             nums[index] = nums[index] / nums[index + 1];
             nums.RemoveAt(index + 1);
-            return nums;
+            sequence.RemoveAt(index);
+
         }
 
-        List<float> subtract(List<float> nums, int index)
+        void subtract(int index)
         {
             nums[index] = nums[index] - nums[index + 1];
             nums.RemoveAt(index + 1);
-            return nums;
+            sequence.RemoveAt(index);
         }
 
-        List<float> product(List<float> nums, int index)
+        void product( int index)
         {
             nums[index] = nums[index] * nums[index + 1];
             nums.RemoveAt(index + 1);
-            return nums;
+            sequence.RemoveAt(index);
         }
 
 
@@ -342,11 +358,11 @@ namespace Calculator
 
         String getNumberName(float num)
         {
-            String[] digits = { "", "bir", "iki", "üç", "dörd", "beş", "altı", "yeddi", "səkkiz", "doqquz" };
+            String[] digits = { "", "bir ", "iki ", "üç ", "dörd ", "beş ", "altı ", "yeddi ", "səkkiz ", "doqquz " };
 
-            String[] decimals = { "", "on", "iyirmi", "otuz", "qırx", "əlli", "altmış", "yetmiş", "səksən", "doxsan" };
+            String[] decimals = { "", "on ", "iyirmi ", "otuz ", "qırx ", "əlli ", "altmış ", "yetmiş ", "səksən ", "doxsan " };
 
-            String[] others = { "", "", "", "yüz", "min", "", "", "milyon", ""," "," ", "milyard" };
+            String[] others = { "", "", "", "yüz ", "min ", "", "", "milyon ", ""," "," ", "milyard " };
 
 
             String number = num.ToString();
@@ -362,7 +378,7 @@ namespace Calculator
             }
 
 
-                bool isInteger =! number.Contains(".".ToString());
+            bool isInteger =! number.Contains(".".ToString());
 
 
             String[] parts = new string[2];
@@ -411,8 +427,23 @@ namespace Calculator
             if(length>0)
             {
                 dig = int.Parse(text[length - 1].ToString());
-             
-                result = result + digits[dig] + " ";
+
+                if (dig > 0)
+                {
+                    result = result + digits[dig];
+
+
+                }
+                else if (length == 1)
+                {
+                    result = result + digits[dig];
+
+                    if (dig == 0)
+                    {
+                        result = "sıfır";
+                        }
+                }
+
 
             }
 
@@ -422,7 +453,7 @@ namespace Calculator
                 dig = int.Parse(text[length - 2].ToString());
 
                 
-                result = decimals[dig] + " "+result + " ";
+                result = decimals[dig] +result ;
 
             }
 
@@ -434,12 +465,13 @@ namespace Calculator
                 if (dig != 0)
                 {
 
-                    result = " " + others[3] + " " + result;
+                    result = others[3] + result ;
 
                     if (dig > 1)
-                        result = digits[dig]+" "+ result;
+                        result = digits[dig]+result;
 
                 }
+
             }
 
             if (length > 3)
@@ -451,11 +483,16 @@ namespace Calculator
                 if (dig != 0)
                 {
 
-                    result = " " + others[4] + " " + result;
+                    result = others[4] +  result;
 
                     if (dig > 1)
-                        result = digits[dig] + " " + result;
+                        result = digits[dig] +  result;
 
+                }
+
+                else if (length > 4 && length < 7)
+                {
+                     result = result+ others[4];
                 }
 
             }
@@ -470,7 +507,7 @@ namespace Calculator
                 if (dig != 0)
                 {
 
-                    result = " " + decimals[dig] + " " + result;
+                    result =  decimals[dig] +  result;
 
                   
 
@@ -483,15 +520,19 @@ namespace Calculator
 
 
                 dig = int.Parse(text[length - 6].ToString());
+
                 if (dig != 0)
                 {
-                    result = " " + others[3] + " " + result;
+                    result =  others[3] + result ; 
 
-                    if (dig > 1)
+
+                    if(dig!=1)
                     {
-                        result = digits[dig] + result;
+                        result = digits[dig] +result;
                     }
                 }
+                
+                
 
             }
 
@@ -502,7 +543,7 @@ namespace Calculator
                 dig = int.Parse(text[length - 7].ToString());
                 
                 
-                    result = digits[dig] + " " + others[7]+" "+ result ;
+                    result = digits[dig] + others[7]+result ;
                 
 
             }
@@ -517,7 +558,7 @@ namespace Calculator
                 dig = int.Parse(text[length - 8].ToString());
                 if (dig != 0)
                 {
-                    result = decimals[dig] + " " + result;
+                    result = decimals[dig] +  result;
                 }
 
             }
@@ -533,11 +574,11 @@ namespace Calculator
                 dig = int.Parse(text[length - 9].ToString());
                 if (dig != 0)
                 {
-                    result = others[3] + " " + result+" ";
+                    result = others[3] +  result;
 
                     if (dig > 1)
                     {
-                        result = digits[dig] + " " + result;
+                        result = digits[dig] +   result;
                     }
 
 
@@ -552,7 +593,7 @@ namespace Calculator
                 dig = int.Parse(text[length - 7].ToString());
 
 
-                result = digits[dig] + " " + others[11] + " " + result;
+                result = digits[dig] +   others[11] +   result;
 
 
             }
@@ -582,11 +623,11 @@ namespace Calculator
 
                  if (len == 1)
                 {
-                    result = result + " onda ";
+                    result = result + "onda ";
                 }
                 if (len == 2)
                 {
-                    result = result + " yüzdə ";
+                    result = result + "yüzdə ";
                 }
 
                 if (len == 3)
@@ -595,28 +636,28 @@ namespace Calculator
                 }
                 if (len == 4)
                 {
-                    result = result + " on  mində ";
+                    result = result + "on  mində ";
                 }
                 if (len == 5)
                 {
-                    result = result + " yüz mində ";
+                    result = result + "yüz mində ";
                 }
 
                 if (len == 6)
                 {
-                    result = result + " milyonda ";
+                    result = result + "milyonda ";
                 }
                 if (len == 7)
                 {
-                    result = result + " on milyonda ";
+                    result = result + "on milyonda ";
                 }
                 if (len == 8)
                 {
-                    result = result + " yüz milyonda";
+                    result = result + "yüz milyonda";
                 }
                 if (len == 9)
                 {
-                    result = result + " milyardda";
+                    result = result + "milyardda";
                 }
 
                 result = result + dec ;
@@ -645,7 +686,14 @@ namespace Calculator
 
         }
 
-        
+
+     
+
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
